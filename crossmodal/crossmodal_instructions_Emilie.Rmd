@@ -33,10 +33,18 @@ First of all, you need to download the data from the Google drive folder: **http
 ### Load data
 Load in the data.
 ```{r}
-
+setwd(".")
+df_aud <- read_bulk(directory = "C:/Users/Emili/Documents/University/3rd semester/Perception and Action/PercAct2022/crossmodal/data_aud")
+df_vis <- read_bulk(directory = "C:/Users/Emili/Documents/University/3rd semester/Perception and Action/PercAct2022/crossmodal/data_vis")
 ```
 
 Hint: you can use read_bulk() from the readbulk package to load the different csv files into one dataframe (one df for vision, one for audition). 
+
+```{r}
+#viewing the data
+view(df_aud)
+view(df_vis)
+```
 
 
 ### Discussion
@@ -50,25 +58,52 @@ To begin with try to get an overview of the data by answering the following ques
 
 What variables do we have? 
 ```{r}
-
+#Getting the variables from each dataframe
+ls(df_aud)
+ls(df_vis)
 ```
 
 Which variables are we interested in? 
 
 Are the variables in the right format (e.g., factor, numeric)? If they are not, make sure they are.
 ```{r}
+str(df_aud)
+str(df_vis)
 
+#Mutating
+# AUDITION 
+df_aud <- df_aud %>% 
+  mutate(
+    accuracy = as.factor(accuracy),
+    congruency = as.factor(congruency),
+    subject = as.factor(subject)
+)
+
+# VISION
+df_vis <- df_vis %>% 
+  mutate(
+    accuracy = as.factor(accuracy),
+    congruency = as.factor(congruency),
+    subject = as.factor(subject)
+)
 ```
 
 How many participants do we have in each condition?
 ```{r}
+#Participants in vis
+length(unique(df_vis$subject))
 
+#Participants in aud
+length(unique(df_aud$subject))
 ```
-
 
 Create new dataframes that only contains the correct trials. The dataframes with both correct and incorrect trials will be used in the last part of the exercise, so do not overwrite this. 
 ```{r}
-
+df_aud_new <- df_aud %>% 
+  filter(accuracy == "true")
+  
+df_vis_new <- df_vis %>% 
+  filter(accuracy == "true")
 ```
 
 
@@ -76,7 +111,27 @@ Create new dataframes that only contains the correct trials. The dataframes with
 To further look into the data, lets make a quick plot! More specifically, make a plot of the mean reaction time per concurrency. Make sure to include errorbars. 
 
 ```{r}
+# AUDITION
+df_aud_new %>% 
+  ggplot() +
+  aes(x = congruency, y = rt, color = congruency) +
+  stat_summary(fun = "mean", geom = "point", size = 3) + #adds mean points
+  stat_summary(fun = 'mean', geom = 'line', color = 'gray55', aes(group = 1)) + #adds mean line
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) + #adds the mean standard errorbars
+  theme(legend.position = 'None') +
+  labs(title = 'Mean RT of audition with SE errorbars') +
+  theme_classic()
 
+# VISION
+df_vis_new %>% 
+  ggplot() +
+  aes(x = congruency, y = rt, color = congruency) +
+  stat_summary(fun = "mean", geom = "point", size = 3) + #adds mean points
+  stat_summary(fun = 'mean', geom = 'line', color = 'gray55', aes(group = 1)) + #adds mean line
+  stat_summary(fun.data = "mean_se", geom = "errorbar", width = .1) + #adds the mean standard errorbars
+  theme(legend.position = 'None') +
+  labs(title = 'Mean RT of vision with SE errorbars')+
+  theme_classic()
 ```
 
 ### Discussion
@@ -88,7 +143,7 @@ Does congruency predict the reaction time? Lets find out.
 
 To do this, make a simple linear model. 
 ```{r}
-
+model1 <- lmer()
 ```
 
 ### Report the results

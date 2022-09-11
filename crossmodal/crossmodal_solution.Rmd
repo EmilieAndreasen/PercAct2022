@@ -104,7 +104,7 @@ aud_correct <- aud %>%
 To further look into the data, lets make a quick plot! More specifically, make a plot of the mean reaction time per concurrency. Make sure to include errorbars. 
 ```{r}
 # AUDITION
-aud_correct %>% 
+df_aud_new %>% 
   ggplot() +
   aes(x = congruency, y = rt, color = congruency) +
   stat_summary(fun = "mean", geom = "point", size = 3) +
@@ -115,7 +115,7 @@ aud_correct %>%
   theme_classic()
 
 # VISION
-vis_correct %>% 
+df_vis_new %>% 
   ggplot() +
   aes(x = congruency, y = rt, color = congruency) +
   stat_summary(fun = "mean", geom = "point", size = 3) +
