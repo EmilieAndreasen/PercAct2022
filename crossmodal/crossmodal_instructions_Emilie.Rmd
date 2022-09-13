@@ -143,7 +143,8 @@ Does congruency predict the reaction time? Lets find out.
 
 To do this, make a simple linear model. 
 ```{r}
-model1 <- lmer()
+model1 <- lmer(rt~congruency + (1|subject), data = df_aud_new)
+summary(model1)
 ```
 
 ### Report the results
